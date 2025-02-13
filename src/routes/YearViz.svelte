@@ -4,16 +4,16 @@
   import * as d3 from "d3";
 
   const endPoint = { x: 1300, y: 400 };
-  const yAxis_length = 700;
+  const mainChartWidth = 900;
 
   /**
    * @type {SVGSVGElement|null}
    */
   export let barchart;
   let container;
-  export const margin = { top: 0, right: 100, left: 30, bottom: 20 };
-  export const width = 1000 - margin.left - margin.right;
-  export const height = 700 - margin.top - margin.bottom;
+  export const margin = { top: 0, right: 100, left: 0, bottom: 20 };
+  export const width = mainChartWidth - margin.left - margin.right;
+  export const height = mainChartWidth * 0.7 - margin.top - margin.bottom;
 
   const data = [
     { period: "< 30 Days", count: 5351 },
@@ -26,13 +26,137 @@
     { period: "5+ Years", count: 11983 },
   ];
 
+  const data2D = [
+    {
+      period: "All Time",
+      allOrgans: 104301,
+      kidney: 90088,
+      liver: 9243,
+      pancreas: 843,
+      kidneyPancreas: 2237,
+      heart: 3592,
+      lung: 948,
+      heartLung: 42,
+      intestine: 184,
+    },
+    {
+      period: "< 30 Days",
+      allOrgans: 5374,
+      kidney: 3872,
+      liver: 933,
+      pancreas: 39,
+      kidneyPancreas: 128,
+      heart: 379,
+      lung: 209,
+      heartLung: 6,
+      intestine: 10,
+    },
+    {
+      period: "30-90 Days",
+      allOrgans: 7912,
+      kidney: 6154,
+      liver: 1158,
+      pancreas: 53,
+      kidneyPancreas: 206,
+      heart: 392,
+      lung: 195,
+      heartLung: 7,
+      intestine: 16,
+    },
+    {
+      period: "90 Days-6 Months",
+      allOrgans: 11949,
+      kidney: 9694,
+      liver: 1483,
+      pancreas: 94,
+      kidneyPancreas: 313,
+      heart: 499,
+      lung: 207,
+      heartLung: 6,
+      intestine: 20,
+    },
+    {
+      period: "6 Months-1 Year",
+      allOrgans: 18384,
+      kidney: 15619,
+      liver: 1779,
+      pancreas: 145,
+      kidneyPancreas: 512,
+      heart: 689,
+      lung: 156,
+      heartLung: 9,
+      intestine: 37,
+    },
+    {
+      period: "1-2 Years",
+      allOrgans: 24282,
+      kidney: 21492,
+      liver: 1693,
+      pancreas: 198,
+      kidneyPancreas: 585,
+      heart: 727,
+      lung: 114,
+      heartLung: 7,
+      intestine: 34,
+    },
+    {
+      period: "2-3 Years",
+      allOrgans: 15088,
+      kidney: 13821,
+      liver: 767,
+      pancreas: 110,
+      kidneyPancreas: 283,
+      heart: 334,
+      lung: 38,
+      heartLung: 2,
+      intestine: 20,
+    },
+    {
+      period: "3-5 Years",
+      allOrgans: 15279,
+      kidney: 14057,
+      liver: 768,
+      pancreas: 86,
+      kidneyPancreas: 183,
+      heart: 360,
+      lung: 21,
+      heartLung: 3,
+      intestine: 21,
+    },
+    {
+      period: "5+ Years",
+      allOrgans: 11625,
+      kidney: 10520,
+      liver: 758,
+      pancreas: 124,
+      kidneyPancreas: 93,
+      heart: 243,
+      lung: 10,
+      heartLung: 2,
+      intestine: 29,
+    },
+  ];
+
   onMount(() => {
+    const getDetailData = (d) => {
+      const selectedRow = data2D.find((entry) => entry.period === d.period);
+      if (selectedRow) {
+        return Object.entries(selectedRow)
+          .filter(([key]) => key != "period" && key != "allOrgans")
+          .map(([key, value]) => ({ subCategory: key, count: value }))
+          .sort((a, b) => b.count - a.count);
+      }
+      return d;
+    };
+
     // Create SVG
     const svg = d3
       .select(barchart)
       .append("svg")
       .attr("width", "100%")
       .attr("height", "100%")
+      // .attr("width", `${mainChartWidth * 2}`)
+      // .attr("height", `${mainChartWidth * 0.7}`)
       .attr(
         "viewBox",
         `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`
@@ -60,7 +184,7 @@
       .scaleBand()
       .range([0, height])
       .domain(data.map((d) => d.period))
-      .padding(0.4);
+      .padding(0.3);
 
     // X scale (for counts)
     const x = d3
@@ -68,27 +192,7 @@
       .range([width, 0])
       .domain([0, d3.max(data, (d) => d.count)]);
 
-    // Add X axis
-    // svg.append("g").call(d3.axisTop(x).tickFormat(d3.format(",")));
-    // .selectAll("text")
-    // .style("text-anchor", "start")
-    // .attr("dx", "0em")
-    // .attr("dy", "0.9em")
-    // .attr("transform", "rotate(-45)");
-
-    // Create tooltip
-    const tooltip = d3
-      .select(container)
-      .append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0)
-      .style("position", "absolute")
-      .style("background-color", "white")
-      .style("border", "1px solid #ddd")
-      .style("padding", "10px")
-      .style("border-radius", "4px");
-
-    // Add bars
+    // Add layer1 gradient bars
     svg
       .selectAll(".layer1")
       .data(data)
@@ -100,8 +204,23 @@
       // .attr("rx", 20)
       .attr("fill", "url(#gradient)");
 
+    // Add layer2 highlight gradient bars
     svg
       .selectAll(".layer2")
+      .data(data)
+      .join("rect")
+      .attr("y", (d) => y(d.period))
+      .attr("x", (d) => x(d.count))
+      .attr("class", (d) => `bar-${d.period.replace(/[^a-zA-Z0-9]/g, "-")}`)
+      .attr("height", y.bandwidth())
+      .attr("width", (d) => width - x(d.count))
+      // .attr("rx", 20)
+      .attr("fill", "url(#highlight)")
+      .style("opacity", 0);
+
+    // Add layer3 noise
+    svg
+      .selectAll(".layer3")
       .data(data)
       .join("rect")
       .attr("y", (d) => y(d.period))
@@ -112,14 +231,87 @@
       .style("mix-blend-mode", "soft-light")
       .style("opacity", 0.9)
       .on("mouseover", (event, d) => {
-        tooltip.transition().duration(200).style("opacity", 0.8);
-        tooltip
-          .html(`${d.period}: ${d3.format(",")(d.count)}`)
-          .style("left", `${event.pageX + 10}px`)
-          .style("top", `${event.pageY - 28}px`);
+        d3.select(`#wl-count`).text(d3.format(",")(d.count));
+        d3.select(`#wl-period`).text(d.period.toLowerCase());
+
+        d3.select(`.label-${d.period.replace(/[^a-zA-Z0-9]/g, "-")}`)
+          .transition()
+          .duration(200)
+          .style("opacity", 1);
+
+        d3.select(`.bar-${d.period.replace(/[^a-zA-Z0-9]/g, "-")}`)
+          .transition()
+          .duration(200)
+          .style("opacity", 1);
       })
-      .on("mouseout", () => {
-        tooltip.transition().duration(500).style("opacity", 0);
+      .on("mouseout", (event, d) => {
+        d3.select(`.label-${d.period.replace(/[^a-zA-Z0-9]/g, "-")}`)
+          .transition()
+          .duration(200)
+          .style("opacity", 0);
+
+        d3.select(`.bar-${d.period.replace(/[^a-zA-Z0-9]/g, "-")}`)
+          .transition()
+          .duration(200)
+          .style("opacity", 0);
+      })
+      // on mouse down, create detailed bar chart
+      .on("mousedown", (event, d) => {
+        svg.selectAll(".detail-bars").remove();
+        const detailData = getDetailData(d); // fetch from data2D
+        // console.log(window.innerWidth - width);
+        const detailX = d3
+          .scaleLinear()
+          .range([0, (window.innerWidth - width) / 5.5]) //define width
+          .domain([0, d3.max(detailData, (d) => d.count)]);
+        const detailY = d3
+          .scaleBand()
+          .range([0, (y.bandwidth() * detailData.length) / 2])
+          .domain(detailData.map((d) => d.subCategory))
+          .padding(0.3);
+        const detailGroup = svg
+          .append("g")
+          .attr("class", "detail-bars")
+          .attr(
+            "transform",
+            `translate(${width + 1},  ${y(d.period) - y.bandwidth()})`
+          );
+
+        // Append sub-bars
+        detailGroup
+          .selectAll("rect")
+          .data(detailData)
+          .join("rect")
+          .attr("y", (d) => detailY(d.subCategory))
+          .attr("x", 0)
+          .attr("height", detailY.bandwidth())
+          .attr("width", (d) => detailX(d.count))
+          .attr("fill", "#f8db01")
+          .style("opacity", 0)
+          .transition()
+          .duration(300)
+          .style("opacity", 1);
+
+        // Append sub-bar labels
+        detailGroup
+          .selectAll("text")
+          .data(detailData)
+          .join("text")
+          .attr("x", (d) => detailX(d.count) + 5)
+          .attr("y", (d) => detailY(d.subCategory) + detailY.bandwidth() / 2)
+          .attr("dy", "0.35em")
+          .text((d) => `${d.subCategory}: ${d3.format(",")(d.count)}`)
+          .style("font-size", "11px")
+          .style("fill", "#5c0c06")
+          .style("opacity", 0)
+          .transition()
+          .duration(300)
+          .style("opacity", 1);
+
+        //change displayed text
+        console.log(detailData);
+        d3.select(`#organ-count`).text(d3.format(",")(detailData[0].count));
+        d3.select(`#organ-name`).text(detailData[0].subCategory.toLowerCase());
       });
 
     // add value labels
@@ -127,13 +319,23 @@
       .selectAll(".value-label")
       .data(data)
       .join("text")
-      .attr("class", "value-label")
+      .attr(
+        "class",
+        (d) => `value-label label-${d.period.replace(/[^a-zA-Z0-9]/g, "-")}`
+      )
       .attr("x", (d) => x(d.count) + 5)
       .attr("y", (d) => y(d.period) + y.bandwidth() / 2)
       .attr("dy", "0.35em")
       .text((d) => d3.format(",")(d.count))
-      .style("font-size", "12px")
-      .style("fill", "#f8db01");
+      .style("font-size", "11px")
+      .style("fill", "#f8db01")
+      .style("opacity", 0)
+      .on("mouseover", (event, d) => {
+        d3.select(`.label-${d.period.replace(/[^a-zA-Z0-9]/g, "-")}`)
+          .transition()
+          .duration(200)
+          .style("opacity", 1);
+      });
 
     // Add Y axis
     svg
@@ -146,7 +348,7 @@
       .attr("dx", "-1em")
       .attr("dy", "2.8em")
       .attr("font-family", "Roboto Slab")
-      .style("font-size", "13px")
+      .style("font-size", "11px")
       .style("fill", "#5c0c06");
 
     d3.select("#y-axis")
@@ -173,10 +375,15 @@
 <div bind:this={container}>
   <svg class="main-chart" id="main-chart" bind:this={barchart}>
     <defs>
-      <!-- Define Linear Gradient -->
+      <!-- Linear Gradient -->
       <linearGradient id="gradient">
         <stop offset="0%" stop-color="#5c0c06" />
         <stop offset="100%" stop-color="#B3353509" />
+      </linearGradient>
+
+      <linearGradient id="highlight">
+        <stop offset="0%" stop-color="#0D0106" />
+        <stop offset="100%" stop-color="#D3311809" />
       </linearGradient>
 
       <filter
@@ -280,7 +487,7 @@
         ></feTurbulence>
         <feColorMatrix
           type="saturate"
-          values="2s"
+          values="2"
           x="0%"
           y="0%"
           width="100%"
@@ -342,13 +549,6 @@
     /* margin-left: 10rem; */
     font-family: "Roboto Slab", serif;
     /* border: 1px solid black; */
-  }
-
-  :global(.tooltip) {
-    pointer-events: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-size: 0.875rem;
-    z-index: 10000;
   }
 
   .bg-gradient {

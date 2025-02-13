@@ -99,9 +99,14 @@
   </div>
 
   <div class="details">
-    <span class="text-mid">19,211</span> persons have been on the waiting list
+    <span class="text-mid" id="wl-count">19,211</span> persons have been waiting
     for
-    <span class="text-mid">6 month - 1 year.</span>
+    <span class="text-mid" id="wl-period">6 month - 1 year</span>.
+
+    <br /> <br />
+    Among which,
+    <span class="text-mid" id="organ-count">3,872</span> persons are waiting for
+    <span class="text-mid" id="organ-name">kidney</span> transplantation.
   </div>
 
   <div>
@@ -160,7 +165,7 @@
     text-align: left;
     align-self: start;
     position: absolute;
-    margin: 3rem;
+    margin-left: 3rem;
     top: 150vh;
   }
   .text-large {
