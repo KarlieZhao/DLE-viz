@@ -1,7 +1,8 @@
 <script lang="js">
   import { onMount } from "svelte";
+  import Nav from "./Nav.svelte";
+  import Organs from "./Organs.svelte";
   import YearViz from "./YearViz.svelte";
-
   /**
    * @type {any[]}
    */
@@ -15,7 +16,6 @@
    * control2:{x:number; y: number};
    * }[]}
    */
-  let wordPositions = [];
 
   /** @type {HTMLElement | null} */
   let waitlist = null;
@@ -27,59 +27,60 @@
   let barChart = null;
   /** @type {SVGSVGElement | null} */
   let svgTrails = null;
-
+  let wordPositions = [];
   let barchartWidth = 0;
 
-  const renderTrails = () => {
-    if (words.length > 0 && barChart) {
-      const endPoint = barChart
-        .querySelector("#y-axis")
-        ?.getBoundingClientRect();
-      const endX = endPoint
-        ? endPoint.x + endPoint.width - 6
-        : barChart.getBoundingClientRect().x;
-      const endY = 300;
-      svgTrails?.setAttribute("style", `height: ${endY}px`);
-      barChart.setAttribute("style", `margin-top: ${endY}px`);
+  // svg lines
+  //   const renderTrails = () => {
+  //     if (words.length > 0 && barChart) {
+  //       const endPoint = barChart
+  //         .querySelector("#y-axis")
+  //         ?.getBoundingClientRect();
+  //       const endX = endPoint
+  //         ? endPoint.x + endPoint.width - 6
+  //         : barChart.getBoundingClientRect().x;
+  //       const endY = 300;
+  //       svgTrails?.setAttribute("style", `height: ${endY}px`);
+  //       barChart.setAttribute("style", `margin-top: ${endY}px`);
 
-      wordPositions = words.map((word, index) => {
-        const rect = word.getBoundingClientRect();
-        const startX = rect.left + rect.width / 2;
-        const startY = rect.top + window.scrollY;
+  //       wordPositions = words.map((word, index) => {
+  //         const rect = word.getBoundingClientRect();
+  //         const startX = rect.left + rect.width / 2;
+  //         const startY = rect.top + window.scrollY;
 
-        // start control point
-        const controlX1 = (startX + endX) / 2;
-        const controlY1 = startY + endY / 2 - 500 - index * 100; // offset for curvature
+  //         // start control point
+  //         const controlX1 = (startX + endX) / 2;
+  //         const controlY1 = startY + endY / 2 - 500 - index * 100; // offset for curvature
 
-        // end control point
-        const controlX2 = endX - 30;
-        const controlY2 = endY - 200;
-        return {
-          start: { x: startX, y: startY },
-          end: { x: endX, y: endY },
-          control1: { x: controlX1, y: controlY1 },
-          control2: { x: controlX2, y: controlY2 },
-        };
-      });
-    }
-  };
-  onMount(() => {
-    words = [waitlist, waste, inequity].filter(Boolean);
-    renderTrails();
+  //         // end control point
+  //         const controlX2 = endX - 30;
+  //         const controlY2 = endY - 200;
+  //         return {
+  //           start: { x: startX, y: startY },
+  //           end: { x: endX, y: endY },
+  //           control1: { x: controlX1, y: controlY1 },
+  //           control2: { x: controlX2, y: controlY2 },
+  //         };
+  //       });
+  //     }
+  //   };
+  //   onMount(() => {
+  //     words = [waitlist, waste, inequity].filter(Boolean);
+  //     renderTrails();
 
-    window.addEventListener("resize", renderTrails);
-    return () => {
-      window.removeEventListener("resize", renderTrails);
-    };
-  });
+  //     window.addEventListener("resize", renderTrails);
+  //     return () => {
+  //       window.removeEventListener("resize", renderTrails);
+  //     };
+  //   });
 </script>
 
 <svelte:head>
-  <title>Home</title>
+  <title>Organ Tranplant</title>
   <meta name="description" content="data viz" />
 </svelte:head>
 
-<section>
+<main>
   <div class="cover-video-backdrop">
     <img class="cover-video" src="/cover.png" alt="" />
 
@@ -89,30 +90,32 @@
       <span bind:this={waste}>Waste</span>, and
       <span bind:this={inequity}>Inequity</span>
     </h1>
-
     <div class="about-tag serif">About</div>
   </div>
+
+  <Nav />
+
+  <!-- transplant performed dataviz   -->
+  <Organs />
+
+  <!-- waitlist dataviz -->
+  <!-- <section>
 
   <div class="intro">
     As of Dec. 31, 2024, there are <span class="text-large">104,197</span>
     persons on the national transplant waiting list.
   </div>
+    <div class="details">
+      <span class="text-mid" id="wl-count">19,211</span> persons have been
+      waiting for
+      <span class="text-mid" id="wl-period">6 month - 1 year</span>.
 
-  <div class="details">
-    <span class="text-mid" id="wl-count">19,211</span> persons have been waiting
-    for
-    <span class="text-mid" id="wl-period">6 month - 1 year</span>.
-
-    <br /> <br />
-    Among which,
-    <span class="text-mid" id="organ-count">3,872</span> persons are waiting for
-    <span class="text-mid" id="organ-name">kidney</span> transplantation.
-  </div>
-
-  <div>
+      <br /> <br />
+      Among which,
+      <span class="text-mid">3,872</span> persons are waiting for
+      <span class="text-mid">kidney</span> transplantation.
+    </div>
     <YearViz bind:barchart={barChart} bind:width={barchartWidth} />
-
-    <!-- dashed curves  -->
     <svg class="curves" bind:this={svgTrails} width="100%" height="100%">
       {#each wordPositions as { start, end, control1, control2 }}
         <path
@@ -121,10 +124,19 @@
         />
       {/each}
     </svg>
-  </div>
-</section>
+  </section> -->
+</main>
 
 <style>
+  main {
+    overflow: visible;
+    height: 300vh;
+    scrollbar-width: 0;
+  }
+
+  main::-webkit-scrollbar {
+    width: 0px;
+  }
   section {
     display: flex;
     flex-direction: column;
