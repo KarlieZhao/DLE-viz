@@ -10,7 +10,6 @@
    * @type {SVGSVGElement|null}
    */
   export let barchart;
-  let container;
   export const margin = { top: 0, right: 100, left: 0, bottom: 20 };
   export const width = mainChartWidth - margin.left - margin.right;
   export const height = mainChartWidth * 0.7 - margin.top - margin.bottom;
@@ -372,7 +371,7 @@
   });
 </script>
 
-<div bind:this={container}>
+<div>
   <svg class="main-chart" id="main-chart" bind:this={barchart}>
     <defs>
       <!-- Linear Gradient -->

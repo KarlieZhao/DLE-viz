@@ -100,11 +100,10 @@
 
   <!-- waitlist dataviz -->
   <!-- <section>
-
-  <div class="intro">
-    As of Dec. 31, 2024, there are <span class="text-large">104,197</span>
-    persons on the national transplant waiting list.
-  </div>
+    <div class="intro">
+      As of Dec. 31, 2024, there are <span class="text-large">104,197</span>
+      persons on the national transplant waiting list.
+    </div>
     <div class="details">
       <span class="text-mid" id="wl-count">19,211</span> persons have been
       waiting for
