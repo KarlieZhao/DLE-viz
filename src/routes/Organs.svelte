@@ -2,12 +2,12 @@
   // @ts-nocheck
 
   let organs = [
-    { name: "kidney", number: 0, dimension: "600px", percentage: 70 },
-    { name: "liver", number: 0, dimension: "550px", percentage: 35 },
-    { name: "heart", number: 0, dimension: "250px", percentage: 22 },
-    { name: "lungs", number: 0, dimension: "280px", percentage: 18 },
-    { name: "pancreas", number: 0, dimension: "110px", percentage: 10 },
-    { name: "intestine", number: 0, dimension: "90px", percentage: 5 },
+    { name: "kidney", number: 0, dimension: 600, percentage: 70 },
+    { name: "liver", number: 0, dimension: 550, percentage: 35 },
+    { name: "heart", number: 0, dimension: 250, percentage: 22 },
+    { name: "lungs", number: 0, dimension: 280, percentage: 18 },
+    { name: "pancreas", number: 0, dimension: 110, percentage: 10 },
+    { name: "intestine", number: 0, dimension: 90, percentage: 5 },
   ];
 
   let years = Array.from({ length: 2025 - 1988 + 1 }, (_, i) => 1988 + i);
@@ -26,7 +26,7 @@
       <div
         role="button"
         class="grid-item"
-        style="width: {organ.dimension};"
+        style="width: {organ.dimension}px;"
         tabindex="0"
         on:mouseover={() => (selectedOrgan = organ.name)}
         on:focus={() => (selectedOrgan = organ.name)}
@@ -39,7 +39,7 @@
           <rect
             x="0"
             y="0"
-            width="100%"
+            width="105%"
             height="100%"
             fill={selectedOrgan === organ.name ? "#C5995A" : "#DEB985"}
           />
@@ -49,6 +49,7 @@
           src={"/anatomy/" + organ.name + ".png"}
           alt={organ.name}
           width="100%"
+          style="margin-top: {Math.max(0, 250 - organ.dimension / 3)}px;"
         />
       </div>
     {/each}
@@ -98,7 +99,6 @@
     flex-wrap: nowrap;
     /* gap: clamp(10px, 5vw, 65px); */
     justify-content: center;
-    /* align-items: center; */
     align-items: flex-start;
     padding: 30px;
   }
@@ -114,6 +114,7 @@
 
   .organ-bar {
     position: absolute;
+    align-self: start;
     top: 0;
     left: -10px;
     z-index: 1;
@@ -123,6 +124,9 @@
   .illustration {
     position: relative;
     margin-bottom: 10px;
+    display: block;
+    align-self: center;
+    vertical-align: middle;
     z-index: 2;
   }
 
