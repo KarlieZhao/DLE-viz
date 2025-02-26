@@ -15,21 +15,28 @@
 
 <style>
   .nav {
-    background-color: #273548ee;
+    background-color: #27354855;
     padding: 6px 10px;
-    border: 2px solid #273548ee;
-    border-radius: 4px;
+    border: 3px solid #27354800;
+    border-radius: 5px;
     font-size: 16px;
     color: #dcdcdc;
     position: sticky;
-    margin-top: 30px;
+    margin-top: -55px;
     top: 0px;
-    margin-left: -3px;
+    margin-left: auto;
+    margin-right: 10px;
     z-index: 200;
     backdrop-filter: blur(10px);
     width: max-content;
-    transition: width 0.2s ease-in-out;
+    transition: width 0.2s ease-in;
+    transition: background-color 0.2s ease-in;
   }
+
+  .nav:hover {
+    background-color: #273548;
+  }
+
   .nav a {
     color: #dcdcdc;
     text-decoration: none;

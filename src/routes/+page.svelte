@@ -90,7 +90,7 @@
       <span bind:this={waste}>Waste</span>, and
       <span bind:this={inequity}>Inequity</span>
     </h1>
-    <div class="about-tag serif">About</div>
+    <!-- <div class="about-tag serif">About</div> -->
   </div>
 
   <Nav />
