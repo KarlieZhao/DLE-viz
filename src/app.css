@@ -12,6 +12,7 @@
 	--color-theme-1: #ff3e00;
 	--color-theme-2: #000000;
 	--color-text: #273548;
+	--color-subtext: #46505f;
 	--column-width: 42rem;
 	--column-margin-top: 4rem;
 	font-family: var(--font-body);
@@ -43,12 +44,15 @@ body {
 
 h1,
 h2,
-p {
+h3 {
+	font-family: "Sorts Mill Goudy", serif;
 	font-weight: 400;
+	color: var(--color-text)
 }
 
 p {
 	line-height: 1.5;
+	font-weight: 400;
 }
 
 a {
@@ -61,12 +65,20 @@ a:hover {
 }
 
 h1 {
-	font-size: 2rem;
+	font-size: 5rem;
 	text-align: center;
 }
 
 h2 {
-	font-size: 1rem;
+	font-size: 3rem;
+	line-height: 3.5rem;
+	margin: 0rem
+}
+
+h3 {
+	font-size: 2rem;
+	line-height: 2.5rem;
+	margin: 0rem
 }
 
 pre {
@@ -122,4 +134,16 @@ button:focus:not(:focus-visible) {
 	font-size: 40px;
 	font-family: "Sorts Mill Goudy", serif;
 	margin: 20px;
+}
+
+
+.text-large {
+	font-size: 40px;
+	font-weight: 500;
+	line-height: 30px;
+}
+
+.text-mid {
+	font-size: 28px;
+	font-weight: 400;
 }

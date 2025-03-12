@@ -3,7 +3,6 @@
   import { onMount } from "svelte";
   import * as d3 from "d3";
 
-  const endPoint = { x: 1300, y: 400 };
   const mainChartWidth = 900;
 
   /**
@@ -371,10 +370,24 @@
   });
 </script>
 
+<div class="intro">
+  As of Dec. 31, 2024, there are <span class="text-large">104,197</span>
+  persons on the national transplant waiting list.
+</div>
+<div class="details">
+  <span class="text-mid" id="wl-count">19,211</span> persons have been waiting
+  for
+  <span class="text-mid" id="wl-period">6 month - 1 year</span>.
+
+  <br /> <br />
+  Among which,
+  <span class="text-mid">3,872</span> persons are waiting for
+  <span class="text-mid">kidney</span> transplantation.
+</div>
+
 <div>
   <svg class="main-chart" id="main-chart" bind:this={barchart}>
     <defs>
-      <!-- Linear Gradient -->
       <linearGradient id="gradient">
         <stop offset="0%" stop-color="#5c0c06" />
         <stop offset="100%" stop-color="#B3353509" />
@@ -534,10 +547,27 @@
 </div>
 
 <style>
+  .intro,
+  .details {
+    font-size: 18px;
+    text-align: left;
+    align-self: start;
+    position: relative;
+  }
+  .intro {
+    width: 80vw;
+    margin: 7rem 2rem;
+    margin-top: 15rem;
+  }
+  .details {
+    width: 60vw;
+    margin: 0rem 2rem;
+  }
+
   svg {
     width: 100vw;
     height: 85vh;
-    position: absolute;
+    position: relative;
     left: 0;
     /* border: 1px solid black; */
   }
@@ -545,15 +575,14 @@
   .main-chart {
     width: 100vw;
     z-index: 2000;
-    /* margin-left: 10rem; */
+    position: relative;
     font-family: "Roboto Slab", serif;
-    /* border: 1px solid black; */
   }
 
   .bg-gradient {
     position: absolute;
     top: 100vh;
-    height: 120vh;
-    z-index: -1;
+    height: 300vh;
+    z-index: -10;
   }
 </style>

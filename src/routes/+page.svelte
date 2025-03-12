@@ -1,4 +1,6 @@
 <script lang="js">
+  // @ts-nocheck
+
   import { onMount } from "svelte";
   import Nav from "./Nav.svelte";
   import Organs from "./Organs.svelte";
@@ -31,48 +33,48 @@
   let barchartWidth = 0;
 
   // svg lines
-  //   const renderTrails = () => {
-  //     if (words.length > 0 && barChart) {
-  //       const endPoint = barChart
-  //         .querySelector("#y-axis")
-  //         ?.getBoundingClientRect();
-  //       const endX = endPoint
-  //         ? endPoint.x + endPoint.width - 6
-  //         : barChart.getBoundingClientRect().x;
-  //       const endY = 300;
-  //       svgTrails?.setAttribute("style", `height: ${endY}px`);
-  //       barChart.setAttribute("style", `margin-top: ${endY}px`);
+  const renderTrails = () => {
+    if (words.length > 0 && barChart) {
+      const endPoint = barChart
+        .querySelector("#y-axis")
+        ?.getBoundingClientRect();
+      const endX = endPoint
+        ? endPoint.x + endPoint.width - 6
+        : barChart.getBoundingClientRect().x;
+      const endY = 300;
+      svgTrails?.setAttribute("style", `height: ${endY}px`);
+      // barChart.setAttribute("style", `margin-top: ${endY}px`);
 
-  //       wordPositions = words.map((word, index) => {
-  //         const rect = word.getBoundingClientRect();
-  //         const startX = rect.left + rect.width / 2;
-  //         const startY = rect.top + window.scrollY;
+      wordPositions = words.map((word, index) => {
+        const rect = word.getBoundingClientRect();
+        const startX = rect.left + rect.width / 2;
+        const startY = rect.top + window.scrollY;
 
-  //         // start control point
-  //         const controlX1 = (startX + endX) / 2;
-  //         const controlY1 = startY + endY / 2 - 500 - index * 100; // offset for curvature
+        // start control point
+        const controlX1 = (startX + endX) / 2;
+        const controlY1 = startY + endY / 2 - 500 - index * 100; // offset for curvature
 
-  //         // end control point
-  //         const controlX2 = endX - 30;
-  //         const controlY2 = endY - 200;
-  //         return {
-  //           start: { x: startX, y: startY },
-  //           end: { x: endX, y: endY },
-  //           control1: { x: controlX1, y: controlY1 },
-  //           control2: { x: controlX2, y: controlY2 },
-  //         };
-  //       });
-  //     }
-  //   };
-  //   onMount(() => {
-  //     words = [waitlist, waste, inequity].filter(Boolean);
-  //     renderTrails();
+        // end control point
+        const controlX2 = endX - 30;
+        const controlY2 = endY - 200;
+        return {
+          start: { x: startX, y: startY },
+          end: { x: endX, y: endY },
+          control1: { x: controlX1, y: controlY1 },
+          control2: { x: controlX2, y: controlY2 },
+        };
+      });
+    }
+  };
+  onMount(() => {
+    words = [waitlist, waste, inequity].filter(Boolean);
+    renderTrails();
 
-  //     window.addEventListener("resize", renderTrails);
-  //     return () => {
-  //       window.removeEventListener("resize", renderTrails);
-  //     };
-  //   });
+    window.addEventListener("resize", renderTrails);
+    return () => {
+      window.removeEventListener("resize", renderTrails);
+    };
+  });
 </script>
 
 <svelte:head>
@@ -96,34 +98,33 @@
   <Nav />
 
   <!-- transplant performed dataviz   -->
-  <Organs />
-
+  <section class="history">
+    <div class="title">
+      <h3>Chap. 1</h3>
+      <h2>Transplant History in Numbers</h2>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam consequat
+      purus id elit tincidunt, sed facilisis nulla blandit. Etiam efficitur molestie
+      efficitur. Maecenas sit amet elit at lacus viverra malesuada. Vivamus euismod
+      metus eu diam rutrum, quis auctor dolor sodales.<br />Sed at nunc enim.
+      Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
+      cubilia curae; Maecenas ut congue sem. Vestibulum at dui quis augue
+      rhoncus sagittis.
+    </div>
+    <Organs />
+  </section>
   <!-- waitlist dataviz -->
-  <!-- <section>
-    <div class="intro">
-      As of Dec. 31, 2024, there are <span class="text-large">104,197</span>
-      persons on the national transplant waiting list.
-    </div>
-    <div class="details">
-      <span class="text-mid" id="wl-count">19,211</span> persons have been
-      waiting for
-      <span class="text-mid" id="wl-period">6 month - 1 year</span>.
-
-      <br /> <br />
-      Among which,
-      <span class="text-mid">3,872</span> persons are waiting for
-      <span class="text-mid">kidney</span> transplantation.
-    </div>
+  <section>
     <YearViz bind:barchart={barChart} bind:width={barchartWidth} />
-    <svg class="curves" bind:this={svgTrails} width="100%" height="100%">
+
+    <!-- <svg bind:this={svgTrails} width="100%" height="100%">
       {#each wordPositions as { start, end, control1, control2 }}
         <path
           d={`M ${start.x} 0 C ${control1.x} ${control1.y}, ${control2.x} ${control2.y}, ${end.x} ${end.y}`}
           fill="transparent"
         />
       {/each}
-    </svg>
-  </section> -->
+    </svg> -->
+  </section>
 </main>
 
 <style>
@@ -136,12 +137,26 @@
   main::-webkit-scrollbar {
     width: 0px;
   }
+
   section {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
     flex: 0.6;
+  }
+
+  .history {
+    width: 96%;
+    margin-left: 2%;
+    margin-top: 15rem;
+  }
+
+  .history .title {
+    margin-bottom: 2rem;
+    font-size: 16px;
+    color: var(--color-subtext);
+    width: 70vw;
   }
 
   svg {
@@ -150,6 +165,7 @@
     height: max-content;
     position: absolute;
     left: 0;
+    top: 195vh;
     /* border: 1px solid black; */
   }
 
@@ -159,34 +175,6 @@
     stroke-dasharray: 8px, 8px;
     stroke-width: 1.5;
     fill: none;
-  }
-
-  .intro {
-    font-size: 16px;
-    text-align: left;
-    align-self: start;
-    width: 30vw;
-    position: absolute;
-    margin: 3rem;
-    top: 105vh;
-  }
-
-  .details {
-    font-size: 16px;
-    text-align: left;
-    align-self: start;
-    position: absolute;
-    margin-left: 3rem;
-    top: 150vh;
-  }
-  .text-large {
-    font-size: 40px;
-    font-weight: 500;
-  }
-
-  .text-mid {
-    font-size: 28px;
-    font-weight: 400;
   }
   .cover-video-backdrop {
     height: fit-content;

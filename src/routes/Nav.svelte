@@ -2,15 +2,15 @@
 </script>
 
 <nav class="nav">
-  <a href="#">Prologue</a>
+  <a href="/">Prologue</a>
   &nbsp;&nbsp;-&nbsp;&nbsp;
-  <a href="#">Chap.1</a>
+  <a href="/">Chap.1</a>
   &nbsp;&nbsp;-&nbsp;&nbsp;
-  <a href="#">Chap.2</a>
+  <a href="/">Chap.2</a>
   &nbsp;&nbsp;-&nbsp;&nbsp;
-  <a href="#">Chap.3</a>
+  <a href="/">Chap.3</a>
   &nbsp;&nbsp;-&nbsp;&nbsp;
-  <a href="#">Epilogue</a>
+  <a href="/">Epilogue</a>
 </nav>
 
 <style>
@@ -22,7 +22,7 @@
     font-size: 16px;
     color: #dcdcdc;
     position: sticky;
-    margin-top: -55px;
+    margin-top: -0px;
     top: 0px;
     margin-left: auto;
     margin-right: 10px;
